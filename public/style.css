@@ -1,0 +1,308 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #3eade4; /* Light ocean background */
+}
+
+header {
+    background-color: #0077b3; /* Darker ocean blue */
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+nav {
+    margin: 20px 0;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin: 0 15px;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background 0.3s;
+}
+
+nav a:hover {
+    background-color: #005f8a; /* Hover effect */
+}
+
+h1 {
+    margin: 0;
+    font-size: 2.5em;
+}
+
+h2 {
+    color: #0077b3; /* Section titles */
+}
+
+/* Ad Display Section */
+#ad-display {
+    margin: 20px;
+}
+
+.ad-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.ad {
+    background-color: white;
+    border: 1px solid #0077b3; /* Ad border */
+    border-radius: 8px;
+    padding: 15px;
+    margin: 10px;
+    width: 250px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.ad h3 {
+    color: #0077b3; /* Ad title color */
+}
+
+.ad a {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #0077b3; /* Button color */
+    color: white;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+.ad a:hover {
+    background-color: #005f8a; /* Button hover effect */
+}
+
+/* Manage Ads Section */
+/* Manage Ads Section */
+#manage-ads {
+    margin: 20px auto; /* Center the section horizontally */
+    padding: 20px;
+    background-color: #ffffff; /* White background for forms */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 600px; /* Limit the section width */
+}
+
+#manage-ads h2 {
+    text-align: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center align form elements */
+    width: 100%; /* Make sure form takes full width */
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    width: 100%; /* Full width of form */
+    max-width: 500px; /* Limit the width of the form fields */
+    margin-bottom: 15px; /* Space between form groups */
+}
+
+label {
+    margin: 10px 0 5px;
+    color: #0077b3; /* Label color */
+    align-self: flex-start; /* Align labels to the left */
+}
+
+input[type="text"] {
+    padding: 10px;
+    border: 1px solid #0077b3; /* Input border */
+    border-radius: 5px;
+    width: 100%; /* Input takes full width of form group */
+}
+
+button {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #0077b3; /* Button color */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+    width: 100%; /* Button takes full width of form group */
+    max-width: 500px; /* Limit width for large screens */
+}
+
+button:hover {
+    background-color: #005f8a; /* Button hover effect */
+}
+
+#success-message {
+    color: green;
+    margin-top: 10px;
+    text-align: center; /* Center align success message */
+}
+
+/* User Login Section */
+#user-login {
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #f9f9f9; /* Light gray background for forms */
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* More prominent shadow */
+    max-width: 400px; /* Center the form with a fixed width */
+}
+
+#user-login h2 {
+    text-align: center;
+    font-size: 1.8em;
+    color: #005f8a; /* Darker blue for header */
+    margin-bottom: 20px;
+}
+
+#user-login form {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch; /* Stretch elements to match container width */
+}
+
+#user-login label {
+    margin: 12px 0 5px;
+    color: #005f8a; /* Darker label color */
+    font-weight: bold; /* Bold labels for emphasis */
+}
+
+#user-login input[type="text"],
+#user-login input[type="password"] {
+    padding: 12px;
+    border: 2px solid #005f8a; /* Thicker border for inputs */
+    border-radius: 8px;
+    width: 100%; /* Full width */
+    margin-bottom: 20px;
+    font-size: 1em;
+    box-sizing: border-box; /* Ensure padding doesn't overflow */
+}
+
+#user-login button {
+    padding: 12px;
+    background-color: #005f8a; /* Darker button color */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    width: 100%; /* Full-width button */
+}
+
+#user-login button:hover {
+    background-color: #004970; /* Slightly darker hover effect */
+    transform: scale(1.05); /* Slight zoom on hover */
+}
+
+#login-message {
+    color: red;
+    margin-top: 10px;
+    text-align: center;
+    font-size: 0.9em; /* Slightly smaller text for error messages */
+}
+
+/* Footer Styles */
+footer {
+    background-color: #004970; /* Darker footer background */
+    color: #e0f7fa; /* Lighter text color */
+    text-align: center;
+    padding: 20px 0;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    font-size: 0.9em; /* Smaller font size */
+    box-shadow: 0 -3px 6px rgba(0, 0, 0, 0.1); /* Soft shadow for footer */
+}
+
+footer p {
+    margin: 0;
+}
+
+#user-signup {
+    display: none;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 400px;
+    margin: 50px auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+#user-signup h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+}
+
+#signup-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+#signup-form label {
+    text-align: left;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+#signup-form input {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border 0.3s ease;
+}
+
+#signup-form input:focus {
+    border-color: #007BFF;
+    outline: none;
+}
+
+button[type="submit"] {
+    background-color: #007BFF;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+#signup-message {
+    margin-top: 15px;
+    color: green;
+    display: none;
+}
+
+#user-signup p {
+    margin-top: 20px;
+    color: #555;
+}
+
+#user-signup a {
+    color: #007BFF;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+#user-signup a:hover {
+    text-decoration: underline;
+}

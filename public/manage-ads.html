@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Ads</title>
+    <link rel="stylesheet" href="managestyle.css">
+</head>
+<body>
+    <header>
+        <h1>Create Ad</h1>
+        <nav>
+            <a href="/home">Home</a>
+            <a href="/manage-ads">Create Ads</a>
+            
+        </nav>
+    </header>
+
+    <form id="ad-form" enctype="multipart/form-data">
+        <h2>Create New Ad</h2>
+        <input type="text" id="title" placeholder="Ad Title" required>
+        <input type="text" id="description" placeholder="Ad Description" required>
+        
+        <!-- File input for uploading an image from your device -->
+        <input type="file" id="imageFile" accept="image/*" required>
+        <img id="imagePreview" style="display:none; max-width:200px;" alt="Image Preview" />
+        
+        <input type="url" id="link" placeholder="Ad Link" required>
+        <button type="submit">Add Advertisement to Database</button>
+    </form>
+
+    <section id="ads-container">
+        <h2>Created Ads</h2>
+        <div id="ads"></div>
+    </section>
+
+    <footer>
+        <p>© 2024 Ad Management System</p>
+    </footer>
+
+    <script>
+        const token = localStorage.getItem('token'); // Fetch the stored token from localStorage
+
+        // Function to fetch and display ads
+        async function fetchAds() {
+            const response = await fetch('http://localhost:3003/ads', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            const ads = await response.json();
+            const adsContainer = document.getElementById('ads');
+
+            adsContainer.innerHTML = ''; // Clear existing ads
+            ads.forEach(ad => {
+                const adElement = document.createElement('div');
+                adElement.classList.add('ad');
+                adElement.innerHTML = `
+                    <h3>${ad.title}</h3>
+                    <p>${ad.description}</p>
+                    <img src="http://localhost:3003/uploads/${ad.imageUrl}" alt="${ad.title}" style="max-width: 100%; height: auto;">
+                    <a href="${ad.link}" target="_blank">Buy Link</a>
+                  
+                `;
+                adsContainer.appendChild(adElement);
+            });
+        }
+
+        // Function to submit a new ad
+        document.getElementById('ad-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData();
+            formData.append('title', document.getElementById('title').value);
+            formData.append('description', document.getElementById('description').value);
+            formData.append('link', document.getElementById('link').value);
+            formData.append('imageFile', document.getElementById('imageFile').files[0]);
+
+            try {
+                const response = await fetch('http://localhost:3003/ads', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: formData
+                });
+
+                if (response.ok) {
+                    alert('Ad created successfully!');
+                    fetchAds(); // Refresh the ads after successful creation
+                } else {
+                    const errorMessage = await response.text();
+                    alert('Error creating ad: ' + errorMessage);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error creating ad: ' + error.message);
+            }
+        });
+
+        // Image preview functionality
+        document.getElementById('imageFile').addEventListener('change', (event) => {
+            const file = event.target.files[0]; // Get the selected file
+            const reader = new FileReader(); // Create a FileReader to read the file
+
+            reader.onload = function(e) {
+                const imgPreview = document.getElementById('imagePreview'); // Get the image preview element
+                imgPreview.src = e.target.result; // Set the source of the image to the result from FileReader
+                imgPreview.style.display = 'block'; // Show the image preview
+            };
+
+            if (file) {
+                reader.readAsDataURL(file); // Read the file as a Data URL
+                    }
+                });
+
+        // Fetch ads on page load
+        document.addEventListener('DOMContentLoaded', fetchAds);
+    </script>
+</body>
+</html>

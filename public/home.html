@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advertisement Management System - Home</title>
+    <link rel="stylesheet" href="home.css">
+</head>
+<body>
+    <header>
+        <h1>Welcome to the Advertisement Management System</h1>
+        <nav>
+            
+            <a href="/manage-ads" id="manage-ads-btn">Create Ads</a>
+            <a href="/edit-delete-ads.html">Edit/Delete Ads</a>
+            <a href="#" id="logout-btn">Logout</a>
+        </nav>
+    </header>
+
+    <main>
+        <section id="welcome-section">
+            <h2>MY Ads Dashboard</h2>
+            <p>Welcome, <span id="username"></span>! You are now in your personalized dashboard, where you can manage all your advertisements seamlessly. Here’s what you can do:</p>
+            <ul>
+                <li>Track how many ads you have created.</li>
+                <li>Monitor the number of ads currently live and visible to your audience.</li>
+                <li>Review ads that are not active and decide if they need updates or reactivation.</li>
+            </ul>
+        </section>
+
+        <section id="ads-section">
+            <h2>Your Advertisements</h2>
+            <div id="ads-container">
+                <!-- Ads will be dynamically inserted here -->
+            </div>
+        </section>
+
+        
+    </main>
+
+    <footer>
+        <p>© 2024 Ad Management System</p>
+    </footer>
+
+    <script>
+        // Logout functionality
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            localStorage.removeItem('token'); // Remove the token from localStorage
+            window.location.href = '/'; // Redirect to login page
+        });
+
+        // Fetch and display ads
+        async function fetchAds() {
+            const response = await fetch('http://localhost:3003/ads', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}` // Use the stored token
+                }
+            });
+            if (response.ok) {
+                const ads = await response.json();
+                const adsContainer = document.getElementById('ads-container');
+
+                adsContainer.innerHTML = ''; // Clear previous ads
+                ads.forEach(ad => {
+                    const adElement = document.createElement('div');
+                    adElement.classList.add('ad');
+                    adElement.innerHTML = `
+                        <h3>${ad.title}</h3>
+                        <p>${ad.description}</p>
+                        <img src="http://localhost:3003/uploads/${ad.imageUrl}" alt="${ad.title}" style="max-width: 100%; height: auto;">
+                        <a href="${ad.link}" target="_blank">Buy Link</a>
+                    `;
+                    adsContainer.appendChild(adElement);
+                });
+            } else {
+                console.error('Failed to fetch ads');
+            }
+        }
+
+        // Call fetchAds function to display the ads
+        fetchAds();
+
+        // Fetch user statistics
+        async function fetchUserStats() {
+            const response = await fetch('http://localhost:3003/user-stats', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            if (response.ok) {
+                const stats = await response.json();
+                document.getElementById('total-ads').innerText = stats.totalAds;
+                document.getElementById('active-ads').innerText = stats.activeAds;
+                document.getElementById('inactive-ads').innerText = stats.inactiveAds;
+                document.getElementById('username').innerText = stats.username; // Assuming username is part of the response
+            } else {
+                console.error('Failed to fetch user stats');
+            }
+        }
+
+        // Fetch user stats and ads when the page loads
+        fetchUserStats();
+        fetchAds();
+    </script>
+</body>
+</html>

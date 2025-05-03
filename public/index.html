@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advertisement Management System - Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Advertisement Management System</h1>
+        <nav>
+           
+        </nav>
+        
+    </header>
+
+    <!-- User Login Section -->
+    <section id="user-login">
+        <h2>User Login</h2>
+        <form id="login-form">
+            <label for="login-username">Username:</label>
+            <input type="text" id="login-username" name="username" required><br>
+
+            <label for="login-password">Password:</label>
+            <input type="password" id="login-password" name="password" required><br>
+
+            <button type="submit">Login</button>
+        </form>
+        <div id="login-message" style="color: red; display: none;"></div>
+        <p>Don't have an account? <a href="#" id="show-signup">Create one</a></p>
+    </section>
+
+    <!-- User Sign-Up Section (hidden by default) -->
+    <section id="user-signup" style="display: none;">
+        <h2>Create New Account</h2>
+        <form id="signup-form">
+            <label for="signup-username">Username:</label>
+            <input type="text" id="signup-username" name="username" required><br>
+
+            <label for="signup-password">Password:</label>
+            <input type="password" id="signup-password" name="password" required><br>
+
+            <label for="confirm-password">Re-enter Password:</label>
+            <input type="password" id="confirm-password" name="confirm-password" required><br>
+
+            <button type="submit">Sign Up</button>
+        </form>
+        <div id="signup-message" style="color: green; display: none;"></div>
+        <p>Already have an account? <a href="#" id="show-login">Login here</a></p>
+    </section>
+
+    <footer>
+        <p>© 2024 Ad Management System</p>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const loginForm = document.getElementById('login-form');
+            const signupForm = document.getElementById('signup-form');
+            const loginMessage = document.getElementById('login-message');
+            const signupMessage = document.getElementById('signup-message');
+            const userLoginSection = document.getElementById('user-login');
+            const userSignupSection = document.getElementById('user-signup');
+            const showSignupBtn = document.getElementById('show-signup');
+            const showLoginBtn = document.getElementById('show-login');
+
+            // Show sign-up form and hide login form
+            showSignupBtn.addEventListener('click', (event) => {
+                event.preventDefault();
+                userLoginSection.style.display = 'none';
+                userSignupSection.style.display = 'block';
+            });
+
+            // Show login form and hide sign-up form
+            showLoginBtn.addEventListener('click', (event) => {
+                event.preventDefault();
+                userSignupSection.style.display = 'none';
+                userLoginSection.style.display = 'block';
+            });
+
+            // Form submission for user login
+            loginForm.addEventListener('submit', async function(event) {
+                event.preventDefault();
+                const username = document.getElementById('login-username').value;
+                const password = document.getElementById('login-password').value;
+
+                try {
+                    const response = await fetch('http://localhost:3003/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ username, password })
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        loginMessage.style.color = 'green';
+                        loginMessage.innerText = 'Login successful';
+
+                        // Redirect to "/home" after successful login
+                        setTimeout(() => {
+                            window.location.href = '/home'; // Redirect to the home page
+                        }, 1500); // Wait for 1.5 seconds before redirecting
+                    } else {
+                        const errorMessage = await response.text();
+                        loginMessage.style.color = 'red';
+                        loginMessage.innerText = errorMessage; // Display the error message from the server
+                    }
+                    loginMessage.style.display = 'block'; // Show the login message
+                } catch (error) {
+                    console.error('Error logging in:', error);
+                }
+            });
+
+            // Form submission for user sign-up
+            signupForm.addEventListener('submit', async function(event) {
+                event.preventDefault();
+                const username = document.getElementById('signup-username').value;
+                const password = document.getElementById('signup-password').value;
+                const confirmPassword = document.getElementById('confirm-password').value;
+
+                // Check if passwords match
+                if (password !== confirmPassword) {
+                    signupMessage.style.color = 'red';
+                    signupMessage.innerText = 'Passwords do not match!';
+                    signupMessage.style.display = 'block'; // Show the sign-up message
+                    return;
+                }
+
+                try {
+                    const response = await fetch('http://localhost:3003/register', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ username, password })
+                    });
+
+                    if (response.ok) {
+                        signupMessage.style.color = 'green';
+                        signupMessage.innerText = 'Account created successfully!';
+                        signupForm.reset(); // Clear the form after successful signup
+
+                        // Automatically switch to login form after successful signup
+                        setTimeout(() => {
+                            userSignupSection.style.display = 'none';
+                            userLoginSection.style.display = 'block';
+                            signupMessage.style.display = 'none'; // Hide the success message
+                        }, 1500); // Wait for 1.5 seconds before switching
+                    } else {
+                        const errorMessage = await response.text();
+                        signupMessage.style.color = 'red';
+                        signupMessage.innerText = errorMessage; // Display the error message from the server
+                    }
+                    signupMessage.style.display = 'block'; // Show the sign-up message
+                } catch (error) {
+                    console.error('Error signing up:', error);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

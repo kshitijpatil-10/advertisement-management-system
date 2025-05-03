@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit/Delete Ads</title>
+    <link rel="stylesheet" href="edit.css">
+</head>
+<body>
+    <header>
+        <h1>Edit/Delete Ads</h1>
+        <nav>
+            <a href="/home" id="home-btn">Home</a>
+            <a href="/manage-ads" id="manage-ads-btn">Manage Ads</a>
+            
+        </nav>
+    </header>
+
+    <main>
+        <section id="ads-container">
+            <h2>Your Ads</h2>
+            <div id="ads"></div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2024 Ad Management System</p>
+    </footer>
+
+    <script>
+        const token = localStorage.getItem('token'); // Fetch the stored token from localStorage
+
+        // Fetch and display ads
+        async function fetchAds() {
+            const response = await fetch('http://localhost:3003/ads', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}` // Use the stored token
+                }
+            });
+            const ads = await response.json();
+            const adsContainer = document.getElementById('ads');
+
+            adsContainer.innerHTML = ''; // Clear existing ads
+            ads.forEach(ad => {
+                const adElement = document.createElement('div');
+                adElement.classList.add('ad');
+                adElement.innerHTML = `
+                    <h3>${ad.title}</h3>
+                    <p>${ad.description}</p>
+                    <img src="http://localhost:3003/uploads/${ad.imageUrl}" alt="${ad.title}" style="max-width: 100%; height: auto;"> <!-- Display image -->
+                    <a href="${ad.link}">Buy Link</a>
+                    <button onclick="editAd('${ad._id}')">Edit</button>
+                    <button onclick="deleteAd('${ad._id}')">Delete</button>
+                `;
+                adsContainer.appendChild(adElement);
+            });
+        }
+
+        // Function to edit an ad
+        function editAd(adId) {
+            const newTitle = prompt("Enter new title:");
+            const newDescription = prompt("Enter new description:");
+            const newLink = prompt("Enter new link:");
+
+            if (newTitle && newDescription && newLink) {
+                fetch(`http://localhost:3003/ads/${adId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                    body: JSON.stringify({ title: newTitle, description: newDescription, link: newLink })
+                }).then(response => {
+            if (response.ok) {
+                        fetchAds(); // Refresh the list after editing
+                    } else {
+                        alert('Failed to edit ad');
+                    }
+                });
+            }
+        }
+
+        // Function to delete an ad
+        function deleteAd(adId) {
+            if (confirm("Are you sure you want to delete this ad?")) {
+                fetch(`http://localhost:3003/ads/${adId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                }).then(response => {
+                    if (response.ok) {
+                        fetchAds(); // Refresh the list after deleting
+                    } else {
+                        alert('Failed to delete ad');
+                    }
+                });
+            }
+        }
+
+        // Fetch ads on page load
+        document.addEventListener('DOMContentLoaded', fetchAds);
+    </script>
+</body>
+</html>
